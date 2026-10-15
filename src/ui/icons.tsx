@@ -88,6 +88,15 @@ export const Dice = ({size = 18}: P) =>
     </>,
   );
 
+export const LinkIcon = ({size = 18}: P) =>
+  svg(
+    size,
+    <>
+      <path d="M10 14a4.5 4.5 0 0 0 6.4 0l3-3a4.5 4.5 0 0 0-6.4-6.4l-1 1" />
+      <path d="M14 10a4.5 4.5 0 0 0-6.4 0l-3 3a4.5 4.5 0 0 0 6.4 6.4l1-1" />
+    </>,
+  );
+
 /** The coin used for prices and balances. */
 export const Coin = ({size = 16}: P) => (
   <svg width={size} height={size} viewBox="0 0 24 24" aria-hidden="true">

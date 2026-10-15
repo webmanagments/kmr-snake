@@ -87,6 +87,10 @@ export const profile = {
   markClaimed() {
     if (!state.claimed) patch({claimed: true});
   },
+  /** A name linked from another KMR app: take its key too, so this app owns the name as well. */
+  adopt(name: string, secret: string) {
+    patch({name, secret, claimed: true, lostName: null, joined: state.joined || Date.now()});
+  },
   /** Someone else owns this name on the leaderboard: ask the player for a new one. */
   nameTaken() {
     patch({lostName: state.name, name: null, claimed: false});

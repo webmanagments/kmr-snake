@@ -214,3 +214,21 @@
   outline: 3px solid #fff;
   outline-offset: 2px;
 }
+
+.ns-actions.is-three .ns-random {
+  grid-column: span 3;
+}
+.ns-actions.is-three .ns-join {
+  grid-column: span 4;
+}
+.ns-titles p b {
+  color: var(--text);
+}
+.ns-name.is-code {
+  font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  letter-spacing: 0.12em;
+}
+.ns-key.is-wide3 {
+  grid-column: span 3;
+  font-size: 14px;
+}

@@ -5,7 +5,8 @@ import {sfx} from '../game/audio';
 import {checkName, claimName, leaderboardEnabled, type NameStatus} from '../lib/board';
 import {NAME_RE, profile, useProfile} from '../lib/profile';
 import {focusDefault} from '../lib/spatial';
-import {Backspace, Dice, ShiftIcon} from './icons';
+import {Backspace, Dice, LinkIcon, ShiftIcon} from './icons';
+import {LinkEnter} from './Link';
 import './NameSetup.css';
 
 const ROWS = ['1234567890', 'QWERTYUIOP', 'ASDFGHJKL'];
@@ -34,6 +35,7 @@ export default function NameSetup() {
   const [saving, setSaving] = useState(false);
   const [shake, setShake] = useState(0);
   const checkSeq = useRef(0);
+  const [linking, setLinking] = useState(false);
 
   useEffect(() => {
     requestAnimationFrame(() => focusDefault());
@@ -95,12 +97,22 @@ export default function NameSetup() {
   };
 
   const valid = NAME_RE.test(name);
+  if (linking)
+    return (
+      <LinkEnter
+        onDone={() => undefined /* the app switches to the menu once the profile has a name */}
+        onCancel={() => {
+          setLinking(false);
+          requestAnimationFrame(() => focusDefault());
+        }}
+      />
+    );
   const msg: Record<Status, string> = {
     idle: '3–12 letters, numbers or _',
     short: name.length < 3 ? `${3 - name.length} more to go` : 'Letters, numbers and _ only',
     checking: 'Checking…',
     free: leaderboardEnabled() ? 'Available' : 'Looks good',
-    taken: 'Taken — try another',
+    taken: "Taken. If it's yours, use Link name",
     offline: "Can't check right now — you can still join",
   };
   const tone = status === 'free' ? 'ok' : status === 'taken' ? 'bad' : '';
@@ -179,7 +191,7 @@ export default function NameSetup() {
             _
           </button>
         </div>
-        <div className="ns-row ns-actions">
+        <div className="ns-row ns-actions is-three">
           <button
             type="button"
             className="ns-random"
@@ -190,7 +202,18 @@ export default function NameSetup() {
             }}
           >
             <Dice size={18} />
-            Random name
+            Random
+          </button>
+          <button
+            type="button"
+            className="ns-random ns-link"
+            onClick={() => {
+              sfx.select();
+              setLinking(true);
+            }}
+          >
+            <LinkIcon size={18} />
+            Link name
           </button>
           <button type="button" className="ns-join" onClick={() => void join()} aria-disabled={!valid || status === 'taken' || saving}>
             {saving ? 'Saving…' : 'Start playing'}
